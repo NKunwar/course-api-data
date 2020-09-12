@@ -9,35 +9,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.javabrains.springbootstarter.topic.Topic;
+
 @RestController
 public class CourseController {
 	
 	@Autowired
-	private CourseService topicService;
+	private CourseService courseService;
 	
-	@RequestMapping("/topics")
-	public List<Course> getAllTopics() {
-		return topicService.getAllTopics();
+	@RequestMapping("/topics/{topicid}/courses")
+	public List<Course> getAllCourse(@PathVariable String topicid) {
+		return courseService.getAllCourses(topicid);
 	}
 
-	@RequestMapping("/topics/{id}")
-	public Course getTopic(@PathVariable String id) {
-		return topicService.getTopic(id);
+	@RequestMapping("/topics/{topicid}/courses/{id}")
+	public Course getCourse(@PathVariable String id) {
+		return courseService.getCourse(id);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/topics")
-	public void addTopic(@RequestBody Course topic) {
-		topicService.addTopic(topic);
+	@RequestMapping(method = RequestMethod.POST, value = "/topics/{topicid}/courses")
+	public void addCourse(@RequestBody Course course, @PathVariable String topicid) {
+		course.setTopic(new Topic(topicid, "", ""));
+		courseService.addCourse(course);
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/topics/{id}")
-	public void updateTopic(@RequestBody Course topic, @PathVariable String id) {
-		topicService.updateTopic(topic, id);
+	@RequestMapping(method = RequestMethod.PUT, value = "/topics/{topicid}/courses/{id}")
+	public void updateCourse(@RequestBody Course course, @PathVariable String topicid ,@PathVariable String id) {
+		course.setTopic(new Topic(topicid, "", ""));
+		courseService.updateCourse(course);
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/topics/{id}")
-	public void deleteTopic(@PathVariable String id) {
-		topicService.deleteTopic(id);
+	@RequestMapping(method = RequestMethod.DELETE, value = "/topics/{topicid}/courses/{id}")
+	public void deleteCourse(@PathVariable String id) {
+		courseService.deleteCourse(id);
 	}
 	
 }
